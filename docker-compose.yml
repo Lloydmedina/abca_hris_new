@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: abaca
+    container_name: abaca
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - laravel-network
+
+  # Other services (e.g., a database) go here
+
+networks:
+  laravel-network:
+    driver: bridge

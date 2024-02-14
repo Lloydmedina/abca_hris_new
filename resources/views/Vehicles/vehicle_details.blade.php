@@ -1,0 +1,250 @@
+@extends('Templates.main_layout')
+{{-- BEGIN PAGE LEVEL CSS--}}
+@section('page_level_css')
+<link href="{{ asset('uidesign/vendor/elite/datatables/media/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+@endsection
+{{-- END PAGE LEVEL CSS --}}
+@section('title','Vehicle Details Setup')
+{{-- BEGIN CONTENT --}}
+@section('content')
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+   @include('Templates.alert_message')
+
+   <div class="card">
+      <div class="card-body">
+         <div class="row">
+            <div class="col-6">
+               <h4 class="card-title">Vehicle Details List</h4>
+            </div>
+            <div class="col-6 text-right">
+               <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#entry_modal"><i class="fa fa-plus-circle"></i> Add Vehicle</button>
+            </div>
+         </div>
+         <div class="table-responsive m-t-40">
+            <table id="example23" class="display nowrap table table-sm table-hover table-striped table-bordered" cellspacing="0" width="100%">
+               <thead>
+                  <tr>
+                     <th class="text-center">ID</th>
+                     <th class="text-center">Plate No</th>
+                     <th class="text-center">Year Model</th>
+                     <th class="text-center">Make</th>
+                     <th class="text-center">Series</th>
+                     <th class="text-center">Body Type</th>
+                     <th class="text-center">Color</th>
+                     <th class="text-center">Current Driver</th>
+                     <th class="text-center">Details</th>
+                  </tr>
+               </thead>
+               <tfoot>
+                  <tr>
+                     <th class="text-center">ID</th>
+                     <th class="text-center">Plate No</th>
+                     <th class="text-center">Year Model</th>
+                     <th class="text-center">Make</th>
+                     <th class="text-center">Series</th>
+                     <th class="text-center">Body Type</th>
+                     <th class="text-center">Color</th>
+                     <th class="text-center">Current Driver</th>
+                     <th class="text-center">Details</th>
+                  </tr>
+               </tfoot>
+               <tbody id="list_body" name="list">
+                  @foreach($list as $row)
+                  <tr>
+                     <td class="text-left">
+                        {{ $row->vehicle_id }}
+                     </td>
+                     <td class="text-left">
+                        {{ $row->plate_number }}
+                     </td>
+                     <td class="text-left">
+                        {{ $row->year_model }}
+                     </td>
+                     <td class="text-left">
+                        {{ $row->make }}
+                     </td>
+                     <td class="text-left">
+                        {{ $row->series }}
+                     </td>
+                     <td class="text-left">
+                        {{ $row->body_type }}
+                     </td>                           
+                     <td class="text-left">
+                        {{ $row->color }}
+                     </td>
+                     <td class="text-left">
+                        {{ $row->current_driver }}
+                     </td>
+                     <td class="text-left">
+                           <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#entry_modal2" onclick="listToModal({{ $row->vehicle_id }},'{{ $row->plate_number }}',{{ $row->year_model }},'{{ $row->make }}','{{ $row->series }}','{{ $row->body_type }}','{{ $row->color }}')"><i class="fa fa-plus-circle"></i> LTO Registration Details</button>
+                     </td>                            
+                  </tr>
+                  @endforeach
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+
+   <hr>
+
+</div>
+
+{{-- ENTRY MODAL --}}
+<div id="entry_modal" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="myModalLabelAdd" style=" padding-right: 17px;">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header bg-primary text-white">
+            <h4 class="modal-title">New Vehicle Details</h4>
+            <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true" title="Close">×</button>
+         </div>
+         <form class="form-material" action="{{ url('/add_new_vehicle') }}" method="post">
+            <div class="modal-body">
+               <div class="form-body">
+                  <div class="row p-t-20">
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <label class="control-label">Vehicle ID</label>
+                           <input type="number" id="vehicle_id" name="vehicle_id" class="form-control" required>
+                        </div>
+                     </div>
+                     <!--/span-->
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <label class="control-label">Plate Number</label>
+                           <input class="form-control text-right" type="text" id="plate_number" name="plate_number">
+                        </div>
+                     </div>
+                     <!--/span-->
+                     <div class="col-md-4">
+                        <div class="form-group">
+                           <label class="control-label">Current Driver</label>
+                           <input class="form-control text-right" type="text" id="current_driver" name="current_driver">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Year Model</label>
+                           <input type="number" id="year_model" name="year_model"  class="form-control" required>
+                           </form>
+                        </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Make</label>
+                           <input type="text" id="make" name="make"  class="form-control" required>
+                        </div>
+                     </div>                     
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Series</label>
+                           <input type="text" id="series" name="series"  class="form-control" required>
+                        </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Body Type</label>
+                           <input type="text" id="body_type" name="body_type"  class="form-control" required>
+                        </div>
+                     </div>                    
+                  </div>
+                  <div class="row">
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Color</label>
+                           <input type="text" id="color" name="color"  class="form-control" required>
+                        </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">MV File No</label>
+                           <input type="number" id="mv_file_no" name="mv_file_no"  class="form-control" required>
+                        </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Engine No</label>
+                           <input type="number" id="engine_no" name="engine_no"  class="form-control" required>
+                        </div>
+                     </div>                     
+                     <div class="col-md-3">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Chassis No</label>
+                           <input type="number" id="chassis_no" name="chassis_no"  class="form-control" required>
+                        </div>
+                     </div>                                   
+                  </div>
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group has-danger">
+                           <label class="control-label">LTO CR No</label>
+                           <input type="number" id="lto_cr_no" name="lto_cr_no"  class="form-control" required>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+                        <div class="form-group has-danger">
+                           <label class="control-label">LTO OR No</label>
+                           <input type="number" id="lto_or_no" name="lto_or_no"  class="form-control" required>
+                        </div>
+                     </div>                     
+                     <div class="col-md-4">
+                        <div class="form-group has-danger">
+                           <label class="control-label">LTO OR Date</label>
+                           <input type="text" id="lto_cr_date" name="lto_cr_date"  class="form-control" required>
+                        </div>
+                     </div>                                                   
+                  </div>                       
+               </div>
+            </div>
+            <div class="modal-footer">
+               <div class="form-actions m-auto">
+                  @csrf
+                  <button type="button" class="btn btn-sm btn-danger mr-2" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                  <button type="submit" class="btn btn-sm btn-primary ml-2"> <i class="fa fa-plus-circle"></i> Add</button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+{{-- END UPDATE MODAL --}}
+
+<!-- /.container-fluid -->
+@endsection
+{{-- END CONTENT --}}
+{{-- BEGIN PAGE LEVEL PLUGIN --}}
+@section('page_level_plugin')
+<script src="{{ asset('uidesign/vendor/elite/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('uidesign/vendor/elite/buttons/1.5.1/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('uidesign/vendor/elite/buttons/1.5.1/js/buttons.flash.min.js') }}"></script>
+<script src="{{ asset('uidesign/vendor/elite/ajax/libs/jszip/3.1.3/jszip.min.js') }}"></script>
+<script src="{{ asset('uidesign/vendor/elite/ajax/libs/pdfmake/0.1.32/pdfmake.min.js') }}"></script>
+<script src="{{ asset('uidesign/vendor/elite/ajax/libs/pdfmake/0.1.32/vfs_fonts.js') }}"></script>
+<script src="{{ asset('uidesign/vendor/elite/buttons/1.5.1/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('uidesign/vendor/elite/buttons/1.5.1/js/buttons.print.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+@endsection
+{{-- END PAGE LEVEL PLUGIN --}}
+{{-- BEGIN PAGE LEVEL SCRIPT --}}
+@section('page_level_script')
+<script src="{{ asset('uidesign/js/custom/department.js') }}"></script>
+<script>
+   function listToModal(id,plate_no,year_model, make,series,bodytype,color){
+      
+      document.getElementById("vehicle_id_update").value = id;
+      document.getElementById("plate_number_update").value = plate_no;
+      document.getElementById("year_model_update").value = year_model;
+      document.getElementById("make_update").value = make;
+      document.getElementById("series_update").value = series;
+      document.getElementById("body_type_update").value = bodytype;
+      document.getElementById("color_update").value = color;
+
+   }
+</script>
+@endsection
+{{-- END PAGE LEVEL SCRIPT --}}

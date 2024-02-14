@@ -1,0 +1,329 @@
+@extends('Templates.main_layout')
+{{-- BEGIN PAGE LEVEL CSS--}}
+@section('page_level_css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+@endsection
+{{-- END PAGE LEVEL CSS --}}
+@section('title','Other Income')
+{{-- BEGIN CONTENT --}}
+@section('content')
+<!-- Begin Page Content -->
+<div class="container-fluid">
+   
+   @include('Templates.alert_message')
+
+   <div class="alert_message_js alert text-info fade show d-none" role="alert">
+      <span id="alert_message_js"></span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+
+   <div class="card">
+      <div class="card-body">
+            <form action="{{ url('/other-income') }}" method="get">
+               <div class="row">
+                     @php $colValue = "col-lg-2 col-sm-12"; @endphp
+                     <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                           <label class="control-label">Department</label>
+                              <select id="department" name="department" class="form-control custom-select">
+                                    <option value="0">All</option>
+                                    @foreach($department as $row)
+                                       <option value="{{ $row->SysPK_Dept }}" <?php echo ($row->SysPK_Dept == @$_GET['department']) ? 'selected':'' ?>>{{ $row->Name_Dept }}</option>
+                                    @endforeach
+                              </select>
+                        </div>
+                     </div>
+
+                     <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                           <label class="control-label">Outlet</label>
+                              <select id="outlet" name="outlet" class="form-control custom-select">
+                                    @if(count($outlets) > 1)
+                                       <option value="0">All</option>
+                                    @endif
+                                    @foreach($outlets as $row)
+                                       <option value="{{ $row->outlet_id }}" <?php echo ($row->outlet_id == @$_GET['outlet']) ? 'selected':'' ?>>{{ $row->outlet }}</option>
+                                    @endforeach
+                              </select>
+                        </div>
+                     </div>
+                  
+
+                  <div class="{{ $colValue }}">
+                     <div class="form-group">
+                        <label class="control-label">From: <i class="text-small text-danger">*</i></label>
+                        <input type="date" class="form-control" id="date_from" value="<?php echo @$_GET['date_from'] ?? $date_from; ?>" name="date_from" required>
+                     </div>
+                  </div>
+
+                  <div class="{{ $colValue }}">
+                     <div class="form-group">
+                        <label class="control-label">To: <i class="text-small text-danger">*</i></label>
+                        <input type="date" class="form-control" id="date_to" value="<?php echo @$_GET['date_to'] ?? $date_to; ?>" name="date_to" required>
+                     </div>
+                  </div>
+
+                  <div class="{{ $colValue }}">
+                     <div class="form-group">
+                        {{-- <label class="control-label">&nbsp;</label> --}}
+                        <input style="cursor:pointer" type="submit" class="form-control btn-primary" id="btn-search-button" name="btn_search" hidden>
+                        <label class="hide" style="visibility: hidden">Search Button</label>
+                        <button type="button" class="btn btn-primary mt-auto w-100" id="btn-search-atd"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                     </div>
+                  </div>
+               </div>
+            </form>
+      </div>
+   </div>
+
+   <hr>
+
+   <div class="card">
+      <div class="card-body">
+         <div class="row">
+            <div class="col-lg-4 col-sm-12">
+               <h4 class="card-title">List of Adjustments</h4>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+               <input type="text" class="form-control mb-2" id="myInputSearch" onkeyup="searchNames()" placeholder="Search for names..">
+            </div>
+            <div class="col-lg-3 text-lg-right">
+               <button class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#entry_modal"><i class="fa fa-plus-circle"></i> Add New</button>
+            </div>
+            <div class="col-lg-1 text-tg-right">
+               <form action="{{ url('/upload_service_fee_other') }}" method="post" enctype="multipart/form-data">
+                  @csrf
+                  <div class="form-group row">
+                     <input class="form-control d-none" id="file_import" type="file" name="file_import" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+                     <button id="btn_choose_file" class="btn btn-sm btn-success" type="button"><i class="fa-solid fa-circle-arrow-up"></i> Upload</button>
+                     <button type="submit" id="btn_upload" class="d-none btn btn-sm btn-primary">Upload</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+         <div class="table-responsive mt-3">
+            <table id="example23" class="display nowrap table table-sm table-hover table-striped table-bordered" cellspacing="0" width="100%">
+               <thead>
+                  <tr>
+                     <th class="">Effective Date</th>
+                     <th class="">Emp Code</th>
+                     <th class="">Employee</th>
+                     <th class="">Adjustments/th>
+                     <th class="">Remarks</th>
+                     <th class="">Created At</th>
+                     <th class="text-center">Action</th>
+                  </tr>
+               </thead>
+               {{-- <tfoot>
+                  <tr>
+                        <th class="">Effective Date</th>
+                        <th class="">Emp Code</th>
+                        <th class="">Employee</th>
+                        <th class="">Service Fee</th>
+                        <th class="">Remarks</th>
+                        <th class="">Created At</th>
+                        <th class="text-center">Action</th>
+                  </tr>  
+               </tfoot> --}}
+               <tbody id="myTbody">
+                  @if(count($list))
+                     @foreach($list as $row)
+                        <tr id="{{ $row->payroll_other_id.md5($row->payroll_other_id) }}">
+                           <td class="">
+                              {{ date('M d, Y',strtotime($row->payroll_date)) }}
+                           </td>
+                           <td class="">
+                              {{ $row->emp_code }}
+                           </td>
+                           <td class="">
+                              {{ $row->emp_name }}
+                           </td>
+                           <td class="">
+                              {{ number_format($row->adjustments,2) }}
+                           </td>
+                           <td class="">
+                              {{ $row->remarks}}
+                           </td>
+                           <td>{{ date('M d, Y H:i', strtotime($row->created_at ))}}</td>
+                           <td class="text-center">
+                              <a href="javascript:(0)" data-id="{{ $row->payroll_other_id.md5($row->payroll_other_id) }}" class="ml-1 text-danger deleteatd_" title="Delete Other Income">
+                                 <span class="fa fa-trash"></span>
+                              </a>
+                           </td>
+                        </tr>
+                     @endforeach
+                  @else
+                        <tr><td class="text-center" colspan="12">No record found</td></tr>
+                  @endif
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+
+   <hr>
+
+</div>
+
+{{-- ENTRY MODAL --}}
+<div id="entry_modal" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="myModalLabelAdd" style=" padding-right: 17px;">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header bg-primary text-white">
+            <h4 class="modal-title">Adjustment Entry</h4>
+            <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true" title="Close">×</button>
+         </div>
+         <form class="form-material" action="{{ url('/add_service_fee_other_deduction') }}" method="post">
+            @csrf
+            <div class="modal-body">
+               <div class="form-body">
+                  <div class="row p-t-20">
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <label class="control-label">Effective Date <i class="text-small text-danger">*</i></label>
+                           <input type="date" id="payroll_date" name="payroll_date"  class="form-control" required>
+                        </div>
+                     </div>
+                     <!--/span-->
+                     <div class="col-md-12">
+                        <div class="form-group has-danger">
+                           <label class="control-label">Employee <i class="text-small text-danger">*</i></label>
+                           <select id="emp_code" name="emp_code" class="border form-control custom-select selectpicker" data-live-search="true" required>
+                              <option selected disabled value="">Select Employee</option>
+                              @foreach($employees as $row)
+                                 <option value="{{ $row->UserID_Empl }}">
+                                    {{ $row->Name_Empl }}
+                                 </option>
+                              @endforeach    
+                           </select>
+                        </div>
+                     </div>
+                     <!--/span-->
+                  </div>
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <label class="control-label">Adjustment Total<i class="text-small text-danger">*</i></label>
+                           <input type="number" id="adjustments" name="adjustments"  class="form-control" required>
+                           <input type="text" name="service_type" id="service_type" value="adjustments" hidden>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <label class="control-label">Remarks <i class="text-small text-danger">*</i></label>
+                           <textarea id="" name="remarks" class="form-control" rows="3" required></textarea>
+                        </div>
+                     </div>
+                     <!--/span-->
+                  </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <div class="form-actions m-auto">
+                  <button type="button" class="btn btn-sm btn-danger mr-2" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                  <button type="submit" class="btn btn-sm btn-primary ml-2"> <i class="fa fa-plus-circle"></i> Add</button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+{{-- END ENTRY MODAL --}}
+
+<!-- /.container-fluid -->
+@endsection
+{{-- END CONTENT --}}
+{{-- BEGIN PAGE LEVEL PLUGIN --}}
+@section('page_level_plugin')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+@endsection
+{{-- END PAGE LEVEL PLUGIN --}}
+{{-- BEGIN PAGE LEVEL SCRIPT --}}
+@section('page_level_script')
+
+<script>
+   $(document).ready(function(){
+      // Trigger click submit search button
+      $('#btn-search-atd').click(function(){
+         $('#btn-search-button').click();
+      });
+
+      //trigger click file upload
+      $('#btn_choose_file').click(function(){
+         $('#file_import').click();
+      });
+
+      //trigger click upload submit
+      $('#file_import').change(function(){
+         $('#btn_upload').click();
+      });
+
+      $(document).on('click', '.deleteatd_', function(e) {
+        
+        let id = $(this).data('id');
+        let url = "{{ route('delete_service_charge_other_deduction') }}";
+        let btn_confirm = confirm("Delete Other Income?");
+
+        if (btn_confirm) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {id:id, service_type: 'Other Income'},
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(result) {
+                  if(result.code == 1){
+                     $('.alert_message_js').removeClass('d-none').addClass('alert-success');;
+                     $('#alert_message_js').text(result.message);
+                     $('#'+id).hide();
+                  }
+                },
+                error: function(result){
+                    console.log(result);
+                }
+
+            });
+        }
+
+   });
+
+   });
+   // $('#example23').DataTable({
+   //    dom: 'Bfrtip',
+   //    buttons: [
+   //       'copy', 'csv', 'excel', 'pdf', 'print'
+   //    ],
+   //    order: [[5, 'desc']],
+   // });
+   // $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-sm btn-primary mr-1');
+
+   function searchNames() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInputSearch");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTbody");
+      tr = table.getElementsByTagName("tr");
+
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+         td = tr[i].getElementsByTagName("td")[2];
+         if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+            } else {
+            tr[i].style.display = "none";
+            }
+         }
+      }
+   }
+</script>
+@endsection
+{{-- END PAGE LEVEL SCRIPT --}}

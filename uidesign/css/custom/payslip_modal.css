@@ -1,0 +1,19 @@
+.custom_table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 5%;
+  }
+  
+  .border_with_padding {
+    border: 1px solid;
+    text-align: left;
+    padding: 8px;
+  }
+  
+.no_border{
+    border: 0px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
