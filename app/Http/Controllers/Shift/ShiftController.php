@@ -854,7 +854,6 @@ class ShiftController extends Controller
                 "time_start" => $request->input('time_start'),
                 "time_end" => $request->input('time_end'),
                 "total_hrs" => $request->input('total_hrs'),
-                "flex_time" => $request->input('flex_time'),
                 "default_break_hrs" => $request->input('default_break_hrs'),
                 "Remarks" => $request->input('Remarks'),
                 'is_grave_shift' => $request->input('is_grave_shift', 0)
@@ -902,7 +901,6 @@ class ShiftController extends Controller
                   'time_start' => $r->input('time_start'),
                   'time_end' => $r->input('time_end'),
                   'total_hrs' => $r->input('total_hrs'),
-                  'flex_time' => $r->input('flex_time'),
                   'default_break_hrs' => $r->input('default_break_hrs'),
                   'Remarks' => $r->input('Remarks'),
                   'is_grave_shift' => $r->input('is_grave_shift', 0)

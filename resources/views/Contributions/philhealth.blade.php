@@ -89,12 +89,28 @@
                          <th class="text-right">Total</th>
                       </tr>
                       <tfoot>
-                         <th class="">Philhealth Number</th>
-                         <th class="">Employee</th>
-                         <th class="text-right">Employee Share</th>
-                         <th class="text-right">Employer Share</th>
-                         <th class="text-right">Basic</th>
-                         <th class="text-right">Total</th>
+                        @php
+                            $total_PH_EmployeeShare = $total_PH_EmployerShare = $total_Basic = $total_total = 0;
+                        @endphp
+                        @if(count($philhealthContributions) > 0 )
+                            
+                            @foreach($philhealthContributions as $row)
+
+                                @php
+                                    $total_PH_EmployeeShare += $row->PH_EmployeeShare;
+                                    $total_PH_EmployerShare += $row->PH_EmployerShare;
+                                    $total_Basic += $row->Basic;
+                                    $total_total += $row->total;
+                                @endphp
+
+                            @endforeach
+                        @endif
+                         <th class="">Total</th>
+                         <th class=""></th>
+                         <th class="text-right">{{ number_format($total_PH_EmployeeShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_PH_EmployerShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_Basic, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_total, 2) }}</th>
                       </tfoot>
                    </thead>
                    <tbody id="list_body" name="list">
@@ -155,8 +171,9 @@
     $('#ph_contri_table').DataTable({
         dom: 'Bfrtip',
         buttons: [
-            'csv', 'excel', 'pdf',
-            // 'copy', 'csv', 'excel', 'pdf', 'print',
+            { extend: 'excelHtml5', footer: true },
+            { extend: 'csvHtml5', footer: true },
+            { extend: 'pdfHtml5', footer: true }
         ],
         "displayLength": 50,
         order: [[1, 'asc']]

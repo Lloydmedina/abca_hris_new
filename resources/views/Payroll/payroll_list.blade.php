@@ -29,38 +29,26 @@
                         <div class="col-lg-2 col-sm-12">
                             <div class="form-group">
                                 <label class="control-label">Month</label>
-                                <select id="selected_month" name="selected_month" class="form-control custom-select">
-                                    @foreach ($payroll_month as $data)
-                                        @if ($data['id'] == $month)
-                                            <option value="{{ $data['id'] }}" selected>{{ $data['month'] }}</option>
-                                        @else
-                                            <option value="{{ $data['id'] }}">{{ $data['month'] }}</option>
-                                        @endif
-                                    @endforeach
+                                <select id="payroll_list" name="payroll_list" class="form-control custom-select">
+                                    <option value=1>January</option>
+                                    <option value=2>Febuary</option>
+                                    <option value=3>March</option>
+                                    <option value=4>April</option>
+                                    <option value=5>May</option>
+                                    <option value=6>June</option>
+                                    <option value=7>July</option>
+                                    <option value=8>August</option>
+                                    <option value=9>September</option>
+                                    <option value=10>October</option>
+                                    <option value=11>November</option>
+                                    <option value=12>December</option>
+                                    {{-- @foreach ($payroll_month as $month)
+                                    <option value={{ $month->value}}>{{ $month->month }}</option>
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-8 col-sm-12 text-lg-right">
-
-                            <div class="form-group">
-                                <label class="hide" style="visibility: hidden">Search button</label>
-                                @include('button_component.search_button', ['margin_top' => '9.5'])
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </form>
-
-        <form class="form-material" action="{{ url('/payroll_list') }}" method="get">
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-8 col-sm-12">
+                        <div class="col-lg-4 col-sm-12">
                             <div class="form-group">
                                 <label class="control-label">Payroll List</label>
                                 <select id="payroll_list" name="payroll_list" class="form-control custom-select">
@@ -68,10 +56,6 @@
                                         <option value={{ $list->payroll_id }}>{{ $list->description }}</option>
                                     @endforeach
                                 </select>
-                                <input type="number" min="1" max="9999" maxlength="4" class="form-control"
-                                name="yr" value="{{ $yr }}" hidden>
-                                <input name="selected_month" value="{{ $month }}" hidden>
-
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12 text-lg-right">
@@ -119,7 +103,7 @@
                     <!-- Payroll Summary -->
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#PayrollSummary" role="tab" aria-selected="false">
-                            160C
+                            Payroll Summary
                         </a>
                     </li>
                 </ul>
@@ -862,174 +846,7 @@
                     <!-- Payroll Summary -->
                     <div class="tab-pane active show" id="PayrollSummary" role="tabpanel">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="table-responsive m-t-40">
-                                    <table id="gov_table2"
-                                        class="display nowrap table table-sm table-hover table-striped table-bordered"
-                                        cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center align-middle" >No</th>
-                                                <th class="text-center align-middle" >TIN</th>
-                                                <th class="text-center align-middle" >Employee Name</th>
-                                                <th class="text-center align-middle" >Birthday</th>
-                                                <th class="text-center align-middle" >Civil Status</th>
-                                                <th class="text-center align-middle" >Date From</th>
-                                                <th class="text-center align-middle" >Date To</th>
-                                                <th class="text-center align-middle" >Position</th>
-                                                <th class="text-center align-middle" >Area of Assignment</th>
-                                                <th class="text-center align-middle" >Daily Rate</th>
-                                                <th class="text-center align-middle" >Monthly Rate</th>
-                                                <th class="text-center align-middle" >13th Month Pay</th>
-                                                <th class="text-center align-middle" >Overtime Pay</th>
-                                                <th class="text-center align-middle" >Meal Allowance</th>
-                                                <th class="text-center align-middle" >Service Charge</th>
-                                                <th class="text-center align-middle" >Withholding<br>Tax</th>
-                                                <th class="text-center align-middle" >HDMF<br>No</th>
-                                                <th class="text-center align-middle" >HDMF<br>ER</th>
-                                                <th class="text-center align-middle" >HDMF<br>EE</th>
-                                                <th class="text-center align-middle" >SSS<br>No</th>
-                                                <th class="text-center align-middle" >SSS<br>ER</th>
-                                                <th class="text-center align-middle" >SSS<br>EE</th>
-                                                <th class="text-center align-middle" >PhilHealth<br>No</th>
-                                                <th class="text-center align-middle" >PhilHealth<br>ER</th>
-                                                <th class="text-center align-middle" >PhilHealth<br>EE</th>
-                                                <th class="text-center align-middle" >Other Deduction</th>
-                                                <th class="text-center align-middle" >Actual Compensation Received</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="gov_list2">
-                                            <?php
-                                            $no_gov = 1;
-                                            $gt_wtax = 0;
-                                            $gt_sss = 0;
-                                            $gt_phealth = 0;
-                                            $gt_pagibig = 0;
-                                            $gt_sss_er = 0;
-                                            $gt_phealth_er = 0;
-                                            $gt_pagibig_er = 0;
-                                            $gt_sss_loan = 0;
-                                            $gt_pagibig_loan = 0;
-                                            $gt_sss_c = 0;
-                                            $gt_phealth_c = 0;
-                                            $gt_pagibig_c = 0;
-                                            $gt_daily = 0;
-                                            $gt_monthly = 0;
-                                            ?>
-                                            @if ($payroll_list)
 
-                                                @foreach ($payroll_list as $data)
-                                                    <?php
-                                                    $t_sss = $data->sss + $data->sss_er;
-                                                    $t_philhealth = $data->philhealth + $data->philhealth_er;
-                                                    $t_pag_ibig = $data->pag_ibig + $data->pagibig_er;
-                                                    $gt_daily = $gt_daily + $data->daily_rate;
-                                                    $gt_monthly = $gt_monthly + $data->monthly_rate;
-                                                    
-                                                    $gt_wtax = $gt_wtax + $data->wtax;
-                                                    $gt_sss = $gt_sss + $data->sss;
-                                                    $gt_phealth = $gt_phealth + $data->philhealth;
-                                                    $gt_pagibig = $gt_phealth + $data->philhealth;
-                                                    $gt_sss_er = $gt_sss_er + $data->sss_er;
-                                                    $gt_phealth_er = $gt_phealth_er + $data->philhealth_er;
-                                                    $gt_pagibig_er = $gt_pagibig_er + $data->pagibig_er;
-                                                    $gt_sss_loan = $gt_sss_loan + $data->sss_loan;
-                                                    $gt_pagibig_loan = $gt_pagibig_loan + $data->pagibig_loan;
-                                                    $gt_sss_c = $gt_sss_c + $t_sss;
-                                                    $gt_phealth_c = $gt_phealth_c + $t_philhealth;
-                                                    $gt_pagibig_c = $gt_pagibig_c + $t_pag_ibig;
-                                                    
-                                                    ?>
-                                                    <tr>
-                                                        <th class="text-center align-middle">{{ $no_gov }}</th>
-                                                        <th class="text-left align-middle">{{ $data->TIN_Empl }}</th>
-                                                        <th class="text-left align-middle">{{ $data->emp_name }}</th>
-                                                        <th class="text-left align-middle">{{ $data->BirthDate_Empl }}</th>
-                                                        <th class="text-left align-middle">{{ $data->civilStatus }}</th>
-                                                        <th class="text-left align-middle">{{ $data->date_from }}</th>
-                                                        <th class="text-left align-middle">{{ $data->date_to }}</th>
-                                                        <th class="text-left align-middle">{{ $data->paygroup }}</th>
-                                                        <th class="text-left align-middle">{{ $data->department }}</th>
-                                                        <th class="text-right align-middle">{{ number_format($data->daily_rate,2) }}</th>
-                                                        <th class="text-right align-middle">{{ number_format($data->monthly_rate,2) }}</th>
-                                                        <th class="text-right align-middle">{{ 0.00 }}</th>
-                                                        <th class="text-right align-middle">{{ number_format($data->ot_pay,2) }}</th>
-                                                        <th class="text-right align-middle">{{ number_format($data->rice_allowance,2) }}</th>
-                                                        <th class="text-right align-middle">{{ number_format($data->service_incentive_pay,2) }}</th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->wtax, 2) }}
-                                                        </th>
-                                                        <th class="text-left align-middle">
-                                                            {{ $data->pagibig_no }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->pagibig_er, 2) }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->pag_ibig, 2) }}
-                                                        </th>
-                                                        <th class="text-left align-middle">
-                                                            {{ $data->SSS_Empl }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->sss, 2) }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->sss_er, 2) }}
-                                                        </th>
-                                                        <th class="text-left align-middle">
-                                                            {{ $data->philhealth_no }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->philhealth, 2) }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->philhealth_er, 2) }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->total_deduction, 2) }}
-                                                        </th>
-                                                        <th class="text-right align-middle">
-                                                            {{ number_format($data->net_pay_should_be, 2) }}
-                                                        </th>
-                                                    </tr>
-                                                    <?php $no_gov = $no_gov + 1; ?>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                        {{-- <tfoot>
-                                            <tr>
-                                                <th class="text-center align-middle"></th>
-                                                <th class="text-left align-middle">TOTAL</th>
-                                                <th class="text-right align-middle">{{ number_format($gt_wtax, 2) }}</th>
-                                                <th class="text-right align-middle">{{ number_format($gt_sss, 2) }}</th>
-                                                <th class="text-right align-middle">{{ number_format($gt_phealth, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">{{ number_format($gt_pagibig, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">{{ number_format($gt_sss_er, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">
-                                                    {{ number_format($gt_phealth_er, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">
-                                                    {{ number_format($gt_pagibig_er, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">{{ number_format($gt_sss_loan, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">
-                                                    {{ number_format($gt_pagibig_loan, 2) }}</th>
-                                                <th class="text-right align-middle">{{ number_format($gt_sss_c, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">{{ number_format($gt_phealth_c, 2) }}
-                                                </th>
-                                                <th class="text-right align-middle">{{ number_format($gt_pagibig_c, 2) }}
-                                                </th>
-                                            </tr>
-                                        </tfoot> --}}
-                                    </table>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -1516,9 +1333,9 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="control-label">Double LH</label>
-                                                    <input class="form-control" type="number"
-                                                        name="DoubleLegalHoliday" id="DoubleLegalHoliday"
-                                                        min="-9999999" step='any' onchange="">
+                                                    <input class="form-control" type="number" name="DoubleLegalHoliday"
+                                                        id="DoubleLegalHoliday" min="-9999999" step='any'
+                                                        onchange="">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -1857,15 +1674,44 @@
                     [1, "asc"]
                 ]
             });
-            $('#gov_table2').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
-            $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass(
-                'btn btn-sm btn-primary mr-1');
-            });
+        });
+
+        // $('#example23').DataTable({
+        //     dom: 'Bfrtip',
+        //     buttons: [
+        //         'copy', 'csv', 'excel', 'pdf', 'print',
+        //         {
+        //             extend: "print",
+        //             customize: function(win)
+        //             {
+
+        //                 var last = null;
+        //                 var current = null;
+        //                 var bod = [];
+
+        //                 var css = '@page { size: landscape; }',
+        //                     head = win.document.head || win.document.getElementsByTagName('head')[0],
+        //                     style = win.document.createElement('style');
+
+        //                 style.type = 'text/css';
+        //                 style.media = 'print';
+
+        //                 if (style.styleSheet)
+        //                 {
+        //                   style.styleSheet.cssText = css;
+        //                 }
+        //                 else
+        //                 {
+        //                   style.appendChild(win.document.createTextNode(css));
+        //                 }
+
+        //                 head.appendChild(style);
+        //             }
+        //          },
+        //     ]
+        // });
+
+
 
         function print_payroll() {
             var myWindow = window.open("{{ url('/print_payroll') }}", "myWindow", 'width=1500,height=800');

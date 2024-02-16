@@ -86,7 +86,7 @@
                             <th rowspan="2">Date of Birth</th>
                             <th rowspan="2">Status</th>
                             <th rowspan="2">Position</th>
-                            <th rowspan="2">Outlet</th>
+                            <th rowspan="2">Area of Assignment</th>
                             <th colspan="2" class="text-center">Gross Compensation</th>
                             <th rowspan="2" class="text-center">13th Month Pay</th>
                             <th colspan="1" class="text-center">Others</th>
@@ -97,7 +97,7 @@
                             <th colspan="5" class="text-center">SSS Details</th>
                             <th colspan="3" class="text-center">Philhealth Details</th>
 
-			    <th rowspan="1" class="text-center">Loan Deductions   </th>
+                            <th rowspan="2" class="text-center">Other Deductions</th>
                             <th rowspan="2" class="text-center">Actual Compensation Received</th>
                         </tr>
                         <tr>
@@ -107,7 +107,7 @@
                             {{-- <th class="text-right">13th Month Pay</th> --}}
                             <th class="text-right">Overtime Pay</th>
                             <th class="text-right">Meal allowances</th>
-                            <th class="text-right">Service Charge</th>
+                            <th class="text-right"></th>
                             <th class="text-center">HDMF Number</th>
                             <th class="text-right">Employer Share</th>
                             <th class="text-right">Employee Share</th>
@@ -121,8 +121,6 @@
                             <th class="text-center">Philhealth Number</th>
                             <th class="text-right">Philhealth Employer Share</th>
                             <th class="text-right">Philhealth Employee Share</th>
-
-			    <th class="text-left">1. Government loans<br> 2. Moorgate Loan <br>3. Bridge Access Loan<br> 4. Other Deductions </th>
 
                         </tr>
 

@@ -398,12 +398,8 @@ class LeavesController extends Controller
 
       $birthMonth = date('m', strtotime(session('employee')->BirthDate_Empl));
       $currentMonth = date('m');
-      $timestamp = strtotime ("-1 month",strtotime (session('employee')->BirthDate_Empl));
-      $prevMonth  =  date("m",$timestamp);
 
-     
-
-      if($birthMonth != $currentMonth and $currentMonth != $prevMonth){
+      if($birthMonth != $currentMonth){
         $checkBdayLeave = true;
         $checkBdayLeaveMessage = 'Birthday Leave can only be filed on your Birth month.';
       }
@@ -557,31 +553,6 @@ class LeavesController extends Controller
         // set to same date for bday leave
         $date_to = $date_from;
       }
-
-     $employee = DB::table('employees')->where('SysPK_Empl', $request->input('employee_id'))->first();
-
-     $leaveCredit = 0;
-     $errorMessage = "";
-
-
-    if ($leave_type == 1) 
-    {
-        $leaveCredit = $employee->vacation_leave_credit;
-        $errorMessage = 'Your Vacation Leave With Pay Credit is not enough.';
-    } 
-    elseif ($leave_type == 2) 
-    {
-        $leaveCredit = $employee->sick_leave_credit;
-        $errorMessage = 'Your Sick Leave With Pay Credit is not enough.';
-    }
-
-    if ($leaveCredit <= 0 && ($leave_type == 1 || $leave_type == 2)) {
-        // Redirect back with an error message if leave credit is not enough
-        return redirect()->back()->withErrors([$errorMessage])->withInput();
-    }
-
-
-
 
       // check application
       $date_selected['from'] = $date_from;
@@ -925,11 +896,8 @@ class LeavesController extends Controller
       return response()->json(array("code" => 3, "message" => "Leave partially approved"));
     } elseif ($leave->is_approved == 3) {
 
-
       $emp_id = $leave->emp_id;
       $yr = date("Y", strtotime($leave->leave_date_from));
-
-      $employee = DB::table('employees')->where('SysPK_Empl', $emp_id)->first();
 
       $leave_monitoring = DB::table('leave_monitoring')
         ->where('yr', $yr)
@@ -945,67 +913,8 @@ class LeavesController extends Controller
 
         if ($leave->leave_type_id == 1) {
           $vl = $leave->total_hours;
-          $VLCredit = $employee->vacation_leave_credit;
-          $VLDays = $leave->no_of_days;
-
-
-          
-          $VLCredit = $VLCredit -  $VLDays;
-
-          DB::TABLE('employees')
-            ->WHERE('SysPK_Empl', '=', $emp_id )
-            ->UPDATE([
-            "vacation_leave_credit" => $VLCredit
-          ]);
-
         } elseif ($leave->leave_type_id == 2) {
           $sl = $leave->total_hours;
-
-          $SLCredit = $employee->sick_leave_credit;
-          $SLDays = $leave->no_of_days;
-
-
-          
-          $SLCredit = $SLCredit -  $SLDays;
-
-          DB::TABLE('employees')
-            ->WHERE('SysPK_Empl', '=', $emp_id )
-            ->UPDATE([
-            "sick_leave_credit" => $SLCredit
-          ]);
-
-        } elseif ($leave->leave_type_id == 3) {
-          $ml = $leave->total_hours;
-
-          $MLCredit = $employee->maternity_leave_credit;
-          $MLDays = $leave->no_of_days;
-
-
-          
-          $MLCredit = $MLCredit -  $MLDays;
-
-          DB::TABLE('employees')
-            ->WHERE('SysPK_Empl', '=', $emp_id )
-            ->UPDATE([
-            "maternity_leave_credit" => $MLCredit
-          ]);
-
-        } elseif ($leave->leave_type_id == 6) {
-          $pl = $leave->total_hours;
-
-          $PLCredit = $employee->paternity_leave_credit;
-          $PLDays = $leave->no_of_days;
-
-
-          
-          $PLCredit = $PLCredit -  $PLDays;
-
-          DB::TABLE('employees')
-            ->WHERE('SysPK_Empl', '=', $emp_id )
-            ->UPDATE([
-            "paternity_leave_credit" => $PLCredit
-          ]);
-
         }
 
         DB::TABLE('leave_monitoring')

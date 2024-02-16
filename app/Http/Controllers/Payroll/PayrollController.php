@@ -292,22 +292,9 @@ class PayrollController extends Controller
     $yr = date('Y');
     $month = date('m');
     $payroll_list = array();
-
-    if($request->input('yr')){
-      $yr = $request->input('yr');
-    }
-
-    if($request->input('selected_month')){
-      $month = $request->input('selected_month');
-    }
-    $date_from =$yr."-".$month."-01";
-    $date_to = $yr."-".$month."-31";
-
     $payroll_master = DB::TABLE('payroll')
-      ->where('date_from','>=',date('Y-m-d',strtotime($date_from)))
-      ->where('date_from','<=',date('Y-m-d',strtotime($date_to)))
+      ->whereRaw('YEAR(date_from) = "' . $yr . '"')
       ->get();
-    
     if ($request->input("payroll_list")) {
       $yr = $request->input('yr');
       $payroll_master = DB::TABLE('payroll')
@@ -315,26 +302,25 @@ class PayrollController extends Controller
       if (count($payroll_master) > 0) {
         $payroll_list = DB::TABLE('payroll_detail_2')
           ->join('employees', 'payroll_detail_2.emp_id', 'employees.SysPK_Empl')
-          ->join('payroll', 'payroll_detail_2.payroll_id', 'payroll.payroll_id')
-          ->select('payroll_detail_2.*', 'employees.UserID_Empl', 'employees.BirthDate_Empl', 'employees.SSS_Empl', 'employees.philhealth_no', 'employees.pagibig_no', 'employees.TIN_Empl', 'employees.civilStatus', 'payroll.department', 'payroll.paygroup', 'payroll.date_from', 'payroll.date_to')
+          ->select('payroll_detail_2.*', 'employees.UserID_Empl')
           ->where('payroll_detail_2.payroll_id', $payroll_master[0]->payroll_id)
           ->get();
       }
     }
 
     $payroll_month = [
-      ["id"=>"01", "month"=>"January"],
-      ["id"=>"02", "month"=>"February"],
-      ["id"=>"03", "month"=>"March"],
-      ["id"=>"04", "month"=>"April"],
-      ["id"=>"05", "month"=>"May"],
-      ["id"=>"06", "month"=>"June"],
-      ["id"=>"07", "month"=>"July"],
-      ["id"=>"08", "month"=>"August"],
-      ["id"=>"09", "month"=>"September"],
-      ["id"=>"10", "month"=>"October"],
-      ["id"=>"11", "month"=>"November"],
-      ["id"=>"12", "month"=>"December"]
+      ["value"=>1, "month"=>"January"],
+      ["value"=>2, "month"=>"February"],
+      ["value"=>3, "month"=>"March"],
+      ["value"=>4, "month"=>"April"],
+      ["value"=>5, "month"=>"May"],
+      ["value"=>6, "month"=>"June"],
+      ["value"=>7, "month"=>"July"],
+      ["value"=>8, "month"=>"August"],
+      ["value"=>9, "month"=>"September"],
+      ["value"=>10, "month"=>"October"],
+      ["value"=>11, "month"=>"November"],
+      ["value"=>12, "month"=>"December"]
     ];
 
     return view(
