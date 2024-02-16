@@ -196,7 +196,7 @@
                                  data-leave_type="{{ ucwords(strtolower($row->leave_type)) }} {{ ($row->withPay == 1) ? 'With Pay' : '' }}"
                                  data-leave_date="{{ date('M d, Y', strtotime($row->leave_date_from ))}} - {{ date('M d, Y', strtotime($row->leave_date_to ))}}"
                                  data-leave_total_days="{{ ($row->no_of_days) ? $row->no_of_days : 'N/A' }}"
-                                
+                                 data-leave_time="{{ ($row->time_from == '00:00:00') ? 'N/A' : date('H:i', strtotime($row->time_from)) .'-'. date('H:i', strtotime($row->time_to)) }}"
                                  data-leave_total_hours="{{($row->total_hours) ? $row->total_hours : 'N/A'}}"
                                  data-leave_reason="{{$row->remarks}}"
                                  data-reason_remarks="{{$row->reason_remarks}}"
@@ -296,7 +296,12 @@
                                     <td><strong>Total Days</strong></td>
                                     <td class="text-primary" id="leave_total_days"></td>
                                  </tr>
-                                 
+                                 <tr>        
+                                    <td><strong>Leave Time</strong></td>
+                                    <td class="text-primary" id="leave_time">
+                                          
+                                    </td>
+                                 </tr>
                                  <tr>        
                                     <td><strong>Total Hours</strong></td>
                                     <td class="text-primary" id="leave_total_hours">

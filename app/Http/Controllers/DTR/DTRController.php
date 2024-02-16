@@ -2027,20 +2027,12 @@ class DTRController extends Controller{
 
         if(is_null($date_to)){
           $date_to = date('Y-m-d');
-	}
-
-	$Incomplete = "Incomplete";
-        
-	//Updated by : Markc 2024-02-10 Include Approver1 in display BEGIN
-        /*$dtr_list = DB::TABLE('hr_emp_attendance')
+        }
+        $dtr_list = DB::TABLE('hr_emp_attendance')
                         ->join('employees', 'employees.UserID_Empl', '=', 'hr_emp_attendance.employee_number')
-                        ->whereRaw('dtr_date BETWEEN "'.$date_from.'" AND "'.$date_to.'" AND att_type = "'.$Incomplete.'"')
+                        ->whereRaw('dtr_date BETWEEN "'.$date_from.'" AND "'.$date_to.'" AND (ISNULL(in_am) OR ISNULL(out_pm))')
                         ->select('hr_emp_attendance.*')
-                        ->get();*/
-
-        $dtr_list = DB::SELECT(DB::RAW('CALL displayIncompleteDtrList("'.$date_from.'","'.$date_to.'")'));
-	//Updated by : Markc 2024-02-10 Include Approver1 in display END
-	
+                        ->get();
         if($dept_id){
             $dtr_list = DB::TABLE('hr_emp_attendance')
                         ->join('employees', 'employees.UserID_Empl', '=', 'hr_emp_attendance.employee_number')

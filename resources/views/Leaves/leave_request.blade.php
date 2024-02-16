@@ -12,7 +12,7 @@
 </style>
 @endsection
 {{-- END PAGE LEVEL CSS --}}
-@section('title','1 Leave Request')
+@section('title','Leave Request')
 {{-- BEGIN CONTENT --}}
 @section('content')
 <!-- Begin Page Content -->

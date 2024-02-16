@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
 @endsection
 {{-- END PAGE LEVEL CSS --}}
-@section('title','Salary Adjustments')
+@section('title','Adjustments')
 {{-- BEGIN CONTENT --}}
 @section('content')
 <!-- Begin Page Content -->
@@ -177,7 +177,7 @@
    <div class="modal-dialog modal-md">
       <div class="modal-content">
          <div class="modal-header bg-primary text-white">
-            <h4 class="modal-title">Salary Adjustment</h4>
+            <h4 class="modal-title">Adjustment</h4>
             <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true" title="Close">×</button>
          </div>
          <form class="form-material" action="{{ url('/add_service_fee_other_deduction') }}" method="post">
