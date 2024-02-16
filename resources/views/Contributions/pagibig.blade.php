@@ -89,12 +89,28 @@
                          <th class="text-right">Total</th>
                       </tr>
                       <tfoot>
-                         <th class="">Philhealth Number</th>
-                         <th class="">Employee</th>
-                         <th class="text-right">Employee Share</th>
-                         <th class="text-right">Employer Share</th>
-                         <th class="text-right">Basic</th>
-                         <th class="text-right">Total</th>
+                        @php
+                            $total_EmployeeShare = $total_EmployerShare = $total_Basic = $total_total = 0;
+                        @endphp
+                        @if(count($pagibigContributions) > 0 )
+                            
+                            @foreach($pagibigContributions as $row)
+
+                                @php
+                                    $total_EmployeeShare += $row->EmployeeShare;
+                                    $total_EmployerShare += $row->EmployerShare;
+                                    $total_Basic += $row->Basic;
+                                    $total_total += $row->total;
+                                @endphp
+
+                            @endforeach
+                        @endif
+                         <th class="">Total</th>
+                         <th class=""></th>
+                         <th class="text-right">{{ number_format($total_EmployeeShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_EmployerShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_Basic, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_total, 2) }}</th>
                       </tfoot>
                    </thead>
                    <tbody id="list_body" name="list">

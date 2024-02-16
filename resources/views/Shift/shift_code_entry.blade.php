@@ -32,7 +32,6 @@
                      <th class="">Description</th>
                      <th class="">Time Start</th>
                      <th class="">Time End</th>
-                      <th class="">Is FlexTIme</th>
                      <th class="">Total Hrs</th>
                      <th class="">Break Hrs</th>
                      <th class="">Remarks</th>
@@ -59,9 +58,6 @@
                            {{ $row->time_end }}
                         </td>
                         <td class="">
-                           {{ $row->flex_time }}
-                        </td>
-                        <td class="">
                            {{ $row->total_hrs }}
                         </td>
                      <td class="">
@@ -85,7 +81,6 @@
                               data-time_start="{{ $row->time_start }}"
                               data-time_end="{{ $row->time_end }}"
                               data-total_hrs="{{ $row->total_hrs }}"
-                              data-flex_time="{{ $row->flex_time }}"
                               data-default_break_hrs="{{ $row->default_break_hrs }}"
                               data-description="{{ $row->Description }}"
                               data-remarks="{{ $row->Remarks }}"
@@ -137,7 +132,7 @@
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header bg-primary text-white">
-            <h4 class="modal-title">New Shift Code Entry</h4>
+            <h4 class="modal-title">New Shift Code</h4>
             <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true" title="Close">×</button>
          </div>
          <form class="form-material" action="{{ url('/save_shift_code') }}" method="post">
@@ -180,17 +175,6 @@
                             </div>
                         </div>
                      <!--/span-->
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label">FLEXTIME</label>
-                                  <select id="flex_time" name="flex_time" class="form-control custom-select" required="">
-                                  <option value="NO" @if (old('flex_time') == "YES") {{ 'selected' }} @endif>NO</option>
-                                  <option value="YES" @if (old('flex_time') == "YES") {{ 'selected' }} @endif>YES</option>
-                                  </select>
-                              </div>
-                        </div>
                     </div>
                     <div class="row">
                      <div class="col-md-6">
@@ -279,19 +263,6 @@
                         </div>
                      <!--/span-->
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label">FLEXTIME</label>
-                                  <select id="u_flex_time" name="flex_time" class="form-control custom-select" required="">
-                                  <option value="NO" @if (old('flex_time') == "NO") {{ 'selected' }} @endif>NO</option>
-                                  <option value="YES" @if (old('flex_time') == "YES") {{ 'selected' }} @endif>YES</option>
-
-                                  </select>
-                              </div>
-                        </div>
-                    </div>
-
                     <div class="row">
                      <div class="col-md-6">
                         <div class="form-group">
@@ -457,7 +428,6 @@
          $('#u_time_start').val($(this).data('time_start'));
          $('#u_time_end').val($(this).data('time_end'));
          $('#u_total_hrs').val($(this).data('total_hrs'));
-         $('#u_flex_time').val($(this).data('flex_time'));
          $('#u_default_break_hrs').val($(this).data('default_break_hrs'));
          $('#u_description').val($(this).data('description'));
          $('#u_remarks').val($(this).data('remarks'));

@@ -9,7 +9,7 @@
 </style>
 @endsection
 {{-- END PAGE LEVEL CSS --}}
-@section('title','Leave Form Emp Dash')
+@section('title','Leave Form')
 {{-- BEGIN CONTENT --}}
 @section('content')
 <!-- Begin Page Content -->
@@ -444,16 +444,7 @@ $(document).ready(function(){
 
         let currentSelectedDateFrom = new Date($('#date_selected_from').val());
         let additionalDays = (default_days > 1) ? default_days - 1 : default_days;
-
-        if(default_days == 1)
-        {
-            currentSelectedDateFrom.setDate(currentSelectedDateFrom.getDate() + additionalDays - 1 );
-        }
-        else
-        {
-            currentSelectedDateFrom.setDate(currentSelectedDateFrom.getDate() + additionalDays);
-        }
-        
+        currentSelectedDateFrom.setDate(currentSelectedDateFrom.getDate() + additionalDays);
         let formattedDate = currentSelectedDateFrom.toISOString().split('T')[0];
 
         if(leave_type == 5){
@@ -522,7 +513,6 @@ $(document).ready(function(){
 
 //   return totalDays;
 // }
-
 
 function calculateFiledLeaveDays(startDate, endDate) {
   const oneDay = 24 * 60 * 60 * 1000; // Number of milliseconds in a day

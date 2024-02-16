@@ -92,15 +92,35 @@
                          <th class="text-right">Total</th>
                       </tr>
                       <tfoot>
-                         <th class="">SSS Number</th>
-                         <th class="">Employee</th>
-                         <th class="text-right">SSS Employee Share</th>
-                         <th class="text-right">SSS Employer Share</th>
-                         <th class="text-right">ECC</th>
-                         <th class="text-right">Basic</th>
-                         <th class="text-right">WISP Employee Share</th>
-                         <th class="text-right">WISP Employer Share</th>
-                         <th class="text-right">Total</th>
+                        @php
+                            $total_SSS_EmployeeShare = $total_SSS_EmployerShare = $total_ECC = $total_Basic = $total_wisp_EmployeeShare = $total_wisp_EmployerShare = $total_total = 0;
+                        @endphp
+                        @if(count($sssContributions) > 0 )
+                            
+                            @foreach($sssContributions as $row)
+
+                                @php
+                                    $total_SSS_EmployeeShare += $row->SSS_EmployeeShare;
+                                    $total_SSS_EmployerShare += $row->SSS_EmployerShare;
+                                    $total_ECC += $row->ECC;
+                                    $total_Basic += $row->Basic;
+                                    $total_wisp_EmployeeShare += $row->wisp_EmployeeShare;
+                                    $total_wisp_EmployerShare += $row->wisp_EmployerShare;
+                                    $total_total += $row->total;
+                                @endphp
+
+                            @endforeach
+                        @endif
+
+                         <th class="">Total</th>
+                         <th class=""></th>
+                         <th class="text-right">{{ number_format($total_SSS_EmployeeShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_SSS_EmployerShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_ECC, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_Basic, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_wisp_EmployeeShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_wisp_EmployerShare, 2) }}</th>
+                         <th class="text-right">{{ number_format($total_total, 2) }}</th>
                       </tfoot>
                    </thead>
                    <tbody id="list_body" name="list">
@@ -165,8 +185,9 @@
     $('#sss_contri_table').DataTable({
         dom: 'Bfrtip',
         buttons: [
-            'csv', 'excel', 'pdf',
-            // 'copy', 'csv', 'excel', 'pdf', 'print',
+            { extend: 'excelHtml5', footer: true },
+            { extend: 'csvHtml5', footer: true },
+            { extend: 'pdfHtml5', footer: true }
         ],
         "displayLength": 50,
         order: [[1, 'asc']]

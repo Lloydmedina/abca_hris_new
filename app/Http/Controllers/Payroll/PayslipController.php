@@ -35,16 +35,9 @@ class PayslipController extends Controller
                         ->join('department', 'payroll_detail_2.department', '=', 'department.Name_Dept') // remove this line when already have dept_id in payroll
                         ->join('employees', 'payroll_detail_2.emp_id', '=', 'employees.SysPK_Empl')
                         ->join('employees_rate', 'employees.Position_Empl', '=', 'employees_rate.id')
-                        ->leftJoin('atd', function($join)
-                              {
-                                //(ca.date_from <= _dateTo) AND  (ca.date_to >= _dateTo)
-                                $join->on('atd.emp_id', '=', 'employees.SysPK_Empl');
-                                $join->on('atd.date_to', '=', 'payroll.date_to');
-                              })
                         ->select(
                             'payroll.*',
                             'payroll_detail_2.*',
-                            'atd.remarks as atdremarks',
                             'employees.Name_Empl' ,
                             'employees.FirstName_Empl',
                             'employees.LastName_Empl',

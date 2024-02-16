@@ -71,9 +71,6 @@
                               </th>
                               <th class="text-center align-middle">
                                  Remarks
-			      </th>
-                              <th class="text-center align-middle">
-                                 Approver1
                               </th>
                         </tr>
                      </thead>
@@ -97,10 +94,7 @@
                                  {{$list->out_pm}}
                               </td>
                               <td>
-                                 {{$list->att_type}}
-			      </td>
-                              <td>
-                                 {{$list->approver1}}
+                                 {{$list->att_remarks}}
                               </td>
                               </tr>
                            @endforeach
