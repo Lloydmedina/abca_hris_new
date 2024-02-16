@@ -3,7 +3,7 @@ name: Update ABACA HRIS
 on:
   pull_request:
     branches:
-      - main
+      - test_server
 
 jobs:
   update:
@@ -21,6 +21,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/html
+            cd /var/www/html/test_server
             git pull
             # Additional commands to update your PHP application if needed
