@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lates
 
     steps:
     - name: Checkout code
@@ -16,8 +16,8 @@ jobs:
     - name: Deploy to server
       uses: easingthemes/ssh-deploy@v2.1.6
       with:
-        server_ip: ${{ secrets.SERVER_HOST }}
-        server_username: ${{ secrets.SERVER_USERNAME }}
-        server_password: ${{ secrets.SSH_PRIVATE_KEY }}
-        local_path: '.' 
-        server_path: '/var/www/html' 
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.SERVER_USERNAME }}
+        REMOTE_USER: ${{ secrets.SSH_PRIVATE_KEY }}
+        SOURCE: '.'
+        TARGET: '/var/www/html'
