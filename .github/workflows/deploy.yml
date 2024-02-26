@@ -1,17 +1,25 @@
-name: Deploy to Server
 
-on:
-  push:
-    branches:
-      - main
+        name: Auto Deploy
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Deploy to server
-      run: rsync -avz -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" . ${{ secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }}:/var/www/html/
+        on:
+          push:
+            branches:
+              - main
+        
+        jobs:
+          deploy:
+            runs-on: ubuntu-latest
+        
+            steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+              
+            - name: Install SSH Key
+              uses: webfactory/ssh-agent@v0.5.3
+              with:
+                ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+            - name: Deploy to Droplet
+              run: |
+                ssh root@170.64.210.68 'cd /var/www/html && git pull'
+        
