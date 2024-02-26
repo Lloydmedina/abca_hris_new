@@ -1,0 +1,23 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Deploy to server
+      uses: easingthemes/ssh-deploy@v2.1.6
+      with:
+        server_ip: ${{ secrets.SERVER_HOST }}
+        server_username: ${{ secrets.SERVER_USERNAME }}
+        server_password: ${{ secrets.SSH_PRIVATE_KEY }}
+        local_path: '.' 
+        server_path: '/var/www/html' 
