@@ -13,26 +13,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
       
-    - name: Install SSH Key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        
-    - name: Write SSH private key to file
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      
-    - name: Set permissions for SSH private key
-      run: chmod 600 ~/.ssh/id_rsa
-      
-    - name: Add SSH key to SSH agent
-      run: ssh-add ~/.ssh/id_rsa
-
     - name: Deploy to Droplet
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
-        key: ~/.ssh/id_rsa
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /var/www/html
           git pull
