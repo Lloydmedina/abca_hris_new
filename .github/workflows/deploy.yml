@@ -17,6 +17,10 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+    - name: Add SSH key to SSH agent
+      run: |
+        ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
 
     - name: Deploy to Droplet
       uses: appleboy/ssh-action@master
