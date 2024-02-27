@@ -259,6 +259,7 @@
                                 <th class="text-center align-middle">SSS<br>Loan</th>
                                 <th class="text-center align-middle">PAG-IBIG<br>Loan</th>
                                 <th class="text-center align-middle">MOORGATE<br>Loan</th>
+                                <th class="text-center align-middle">ACCESSLOAN<br>Loan</th>
                                 <th class="text-center align-middle">Adjustment (-)</th>
                                 <th class="text-center align-middle">Cash<br>Advance</th>
                                 <th class="text-center align-middle">ATD</th>
@@ -560,6 +561,9 @@
                                         </td>
                                         <td class="text-right align-middle">
                                             {{ number_format($data->MOORGATE_Loan, 2) }}
+                                        </td>
+                                         <td class="text-right align-middle">
+                                            {{ number_format($data->ACCESS_Loan, 2) }}
                                         </td>
                                         <td class="text-right align-middle">
                                             {{ number_format($data->DeductionAdjustment, 2) }}
