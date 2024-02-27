@@ -416,6 +416,15 @@
                                                                             </td>
                                                                         </tr>
                                                                     @endif
+                                                                    @if ($row->OtherIncome != 0)
+                                                                        <tr id="tr_OtherIncome">
+                                                                            <td>Other<br>Earnings</td>
+                                                                            <td class="text-right align-middle"
+                                                                                id="OtherIncome">
+                                                                                {{ number_format($row->OtherIncome, 2) }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endif
                                                                     @if ($row->Allowance != 0)
                                                                         <tr id="tr_Allowance">
                                                                             <td>Allowance</td>
@@ -438,7 +447,7 @@
                                                                         <td><b>Total<br>Non-Taxable<br>Earnings<b></td>
                                                                         <td class="text-right align-middle"
                                                                             id="totalNonTaxable">
-                                                                            {{ number_format($row->adjustments + $row->HousingAllowance + $row->Allowance + $row->ReimbursementFee + $row->TransportationAllowance + $row->rice_allowance, 2) }}
+                                                                            {{ number_format($row->adjustments + $row->HousingAllowance + $row->Allowance + $row->ReimbursementFee + $row->TransportationAllowance + $row->rice_allowance + $row->OtherIncome, 2) }}
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
