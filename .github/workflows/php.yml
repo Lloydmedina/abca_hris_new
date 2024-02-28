@@ -21,4 +21,4 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
           SOURCE: ./
           TARGET: /var/www/html/
-          
+          #end
