@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Files
 
 on:
   push:
@@ -13,16 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Add additional steps for testing here
-
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@v2
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.DO_KEY }}
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
-          
-          source: ./
-          target: /var/www/html/
-
+          SOURCE: ./
+          TARGET: /var/www/html/
           
