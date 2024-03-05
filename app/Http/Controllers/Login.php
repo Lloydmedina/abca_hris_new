@@ -103,7 +103,10 @@ class Login extends Controller
                 'logged' => true
             ]);
 
-            return redirect('/dashboard');
+            if(!in_array($user->employee_type_id, array(1,2)))
+                return redirect('/my-shift');
+            else
+                return redirect('/employees');
         }
         else{
         	// return redirect('/login')->with('invalid', 'Invalid Credentials')->withInput();

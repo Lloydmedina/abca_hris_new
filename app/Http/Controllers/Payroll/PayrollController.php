@@ -270,6 +270,7 @@ class PayrollController extends Controller
             "AbsentDeduction" => (float) $list->AbsentDeduction,
             "UTDeduction" => (float) $list->UTDeduction,
             "MOORGATE_Loan" => (float) $list->MOORGATE_Loan,
+            "ACCESS_Loan" => (float) $list->ACCESS_Loan,
             "SSSWISPER" => (float) $list->SSSWISPER,
           ];
       }
