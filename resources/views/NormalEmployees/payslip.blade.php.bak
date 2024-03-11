@@ -166,7 +166,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="text-right" id="payPeriod">
-                                                        PAYROLL PERIOD: {{ date('M d, Y', strtotime($row->date_from)) }} -
+                                                        {{ date('M d, Y', strtotime($row->date_from)) }} -
                                                         {{ date('M d, Y', strtotime($row->date_to)) }}
                                                     </label>
                                                 </div>
@@ -186,13 +186,13 @@
                                                         <p id="phNo">{{ $row->philhealth_no }}</p>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <p><b>Bi-Monthly Rate</b></p>
+                                                        <p><b>Basic Pay</b></p>
                                                         <p id="basicPay">{{ number_format($row->basic_pay, 2) }}</p>
                                                     </div>
                                                 </div>
                                                 <div class="row p-t-20" style="padding: 1%;">
                                                     <div class="col-md-6">
-                                                        <p><b>EMP Department / Section</b></p>
+                                                        <p><b>Department / Section</b></p>
                                                         <p id="deptName">{{ $row->department }}</p>
                                                     </div>
                                                     <div class="col-md-2">
@@ -380,11 +380,11 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    @if ($row->adjustments > 0)
+                                                                    @if ($row->adjustments != 0)
                                                                         <tr id="tr_adjustments">
                                                                             <td>Salary<br>Adjustment</td>
                                                                             <td class="text-right align-middle"
-                                                                                id="saladjustments">
+                                                                                id="mealAllowance">
                                                                                 {{ number_format($row->adjustments, 2) }}
                                                                             </td>
                                                                         </tr>
@@ -404,15 +404,6 @@
                                                                             <td class="text-right align-middle"
                                                                                 id="TransportationAllowance">
                                                                                 {{ number_format($row->TransportationAllowance, 2) }}
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endif
-                                                                    @if ($row->communication_allowance != 0)
-                                                                        <tr id="tr_Communication_Allowance">
-                                                                            <td>Mobile Allowance</td>
-                                                                            <td class="text-right align-middle"
-                                                                                id="communication_allowance">
-                                                                                {{ number_format($row->communication_allowance, 2) }}
                                                                             </td>
                                                                         </tr>
                                                                     @endif
@@ -456,14 +447,7 @@
                                                                         <td><b>Total<br>Non-Taxable<br>Earnings<b></td>
                                                                         <td class="text-right align-middle"
                                                                             id="totalNonTaxable">
-                                                                            @if ($row->adjustments > 0)
-                                                                                {{ number_format($row->adjustments + $row->HousingAllowance + $row->Allowance + $row->ReimbursementFee + $row->TransportationAllowance + $row->communication_allowance + $row->rice_allowance, 2) }}
-
-                                                                            @else
-                                                                                {{ number_format($row->HousingAllowance + $row->Allowance + $row->ReimbursementFee + $row->TransportationAllowance +$row->communication_allowance + $row->rice_allowance, 2) }}
-
-                                                                            @endif
-                                                                            
+                                                                            {{ number_format($row->adjustments + $row->HousingAllowance + $row->Allowance + $row->ReimbursementFee + $row->TransportationAllowance + $row->rice_allowance + $row->OtherIncome, 2) }}
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -578,18 +562,9 @@
                                                                                 {{ number_format($row->wtax, 2) }}</td>
                                                                         </tr>
                                                                     @endif
-                                                                    @if ($row->adjustments < 0)
-                                                                        <tr id="tr_adjustments">
-                                                                            <td><b>Salary Adjustment(-)<b></td>
-                                                                            <td class="text-right align-middle"
-                                                                                id="mealAllowance">
-                                                                                {{ number_format(abs($row->adjustments), 2) }}
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endif
                                                                     @if ($row->ATD != 0)
                                                                         <tr>
-                                                                            <td><b>ATD</b> ({{ $row->atdremarks }}) </td>
+                                                                            <td><b>ATD<b></td>
                                                                             <td class="text-right align-middle"
                                                                                 id="atd">
                                                                                 {{ number_format($row->ATD, 2) }}</td>
@@ -643,14 +618,7 @@
                                                                         <td><b>Total Deductions<b></td>
                                                                         <td class="text-right align-middle"
                                                                             id="totalDeduction">
-                                                                            @if ($row->adjustments < 0)
-                                                                                {{ number_format(abs($row->adjustments) + $row->UTDeduction + $row->VLWithOutPayDeduction + $row->SLWithOutPayDeduction + $row->MOORGATE_Loan + $row->other_deductions + $row->pagibig_loan + $row->sss_loan + $row->late_deduction + $row->sss + $row->ssswisp + $row->philhealth + $row->pag_ibig + $row->wtax + $row->cash_advance + $row->ATD, 2) }}
-
-                                                                            @else
-                                                                                {{ number_format($row->UTDeduction + $row->VLWithOutPayDeduction + $row->SLWithOutPayDeduction + $row->MOORGATE_Loan + $row->other_deductions + $row->pagibig_loan + $row->sss_loan + $row->late_deduction + $row->sss + $row->ssswisp + $row->philhealth + $row->pag_ibig + $row->wtax + $row->cash_advance + $row->ATD, 2) }}
-
-                                                                            @endif
-                                                                            
+                                                                            {{ number_format($row->UTDeduction + $row->VLWithOutPayDeduction + $row->SLWithOutPayDeduction + $row->MOORGATE_Loan + $row->other_deductions + $row->pagibig_loan + $row->sss_loan + $row->late_deduction + $row->sss + $row->ssswisp + $row->philhealth + $row->pag_ibig + $row->wtax + $row->cash_advance + $row->ATD, 2) }}
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
